@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>じゃんけん</title>
+    <style>
+        body {
+            text-align: center;
+        }
+        h1 {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        p {
+            font-size: 1.2rem;
+        }
+        button {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            cursor: pointer;
+        }
+        #result {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: red;
+        }
+        #pc-hand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: blue;
+        }
+        #my-hand {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: green;
+        }
+        #times {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <h1>じゃんけん</h1>
+    <p>出す手を選んで勝負してください。</p>
+    <!-- 履歴を表示 -->
+    <div>
+        <p id="times"></p>
+        <p id="history"></p>
+    </div>
+
+    <!-- ボタン -->
+    <div>
+        <button id="rock">グー</button>
+        <button id="scissors">チョキ</button>
+        <button id="paper">パー</button>
+    </div>
+
+    <!-- 勝敗結果 -->
+    <div>
+        <p id="result"></p>
+        <p id="pc-hand"></p>
+        <p id="my-hand"></p>
+    </div>
+    <script>
+        // DOMの取得
+        const rock = document.getElementById('rock');
+        const scissors = document.getElementById('scissors');
+        const paper = document.getElementById('paper');
+        const times = document.getElementById('times');
+        const history = document.getElementById('history');
+        const result = document.getElementById('result');
+        const pcHand = document.getElementById('pc-hand');
+        const myHand = document.getElementById('my-hand');
+
+        // じゃんけんの手を配列に格納、絵文字で表示
+        const hands = ['✊', '✌️', '✋'];
+
+        // 勝敗結果を配列に格納, 絵文字で表示
+        const results = [
+        '勝ち😄',
+        '負け😭',
+        'あいこ😑'
+        ];
+
+        // じゃんけん管理クラス
+        class Janken {
+            constructor() {
+                this.pcHand = "";
+                this.myHand = "";
+                this.result = "";
+                this.history = "";
+                this.times = 0;
+                this.win = 0;
+                this.lose = 0;
+                this.draw = 0;
+            }
+
+            // 勝敗判定
+            judge(myHand) {
+                // PCの手をランダムに決定
+                this.pcHand = Math.floor(Math.random() * 3);
+
+                // 勝敗判定
+                this.result = (myHand - this.pcHand + 3) % 3;
+
+                if (this.result === 0) {
+                    this.draw++;
+                } else if (this.result === 1) {
+                    this.lose++;
+                } else {
+                    this.win++;
+                }
+                this.times++;
+            }
+
+            // ✊ボタンを押した時の処理
+            rock() {
+                this.judge(0);
+                pcHand.textContent = `相手の手は${hands[this.pcHand]}です。`;
+                myHand.textContent = `あなたの手は${hands[0]}です。`;
+                result.textContent = `結果は${results[this.result]}です。`;
+                times.textContent = `対戦回数${this.times}回`;
+                history.textContent = `勝ち${this.win}回、負け${this.lose}回、あいこ${this.draw}回`;
+            }
+
+            // ✌️ボタンを押した時の処理
+            scissors() {
+                this.judge(1);
+                pcHand.textContent = `相手の手は${hands[this.pcHand]}です。`;
+                myHand.textContent = `あなたの手は${hands[1]}です。`;
+                result.textContent = `結果は${results[this.result]}です。`;
+                times.textContent = `対戦回数${this.times}回`;
+                history.textContent = `勝ち${this.win}回、負け${this.lose}回、あいこ${this.draw}回`;
+            }
+
+            // ✋ボタンを押した時の処理
+            paper() {
+                this.judge(2);
+                pcHand.textContent = `相手の手は${hands[this.pcHand]}です。`;
+                myHand.textContent = `あなたの手は${hands[2]}です。`;
+                result.textContent = `結果は${results[this.result]}です。`;
+                times.textContent = `対戦回数${this.times}回`;
+                history.textContent = `勝ち${this.win}回、負け${this.lose}回、あいこ${this.draw}回`;
+            }
+        }
+
+        // インスタンスの生成
+        const janken = new Janken();
+
+        // イベントの登録
+        rock.addEventListener('click', janken.rock.bind(janken));
+        scissors.addEventListener('click', janken.scissors.bind(janken));
+        paper.addEventListener('click', janken.paper.bind(janken));
+    </script>
+</body>
+</html>
